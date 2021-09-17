@@ -1,128 +1,171 @@
 [package]
-authors = ['Substrate DevHub <https://github.com/substrate-developer-hub>']
+authors = ['Creator Platform DevHub <https://github.com/creator-blockchains>']
 build = 'build.rs'
-description = 'Substrate Node template'
+description = 'A fresh FRAME-based Substrate node, ready for hacking.'
 edition = '2018'
-homepage = 'https://substrate.dev'
+homepage = 'https://creatorchain.network/'
 license = 'Unlicense'
-name = 'node-template'
-repository = 'https://github.com/substrate-developer-hub/substrate-node-template/'
-version = '2.0.0-rc4'
+name = 'creatorchain'
+publish = false
+repository = 'https://github.com/creator-blockchains/creator-substrate-node'
+version = '0.0.1'
 [package.metadata.docs.rs]
 targets = ['x86_64-unknown-linux-gnu']
 
-[[bin]]
-name = 'node-template'
-
 [dependencies]
-futures = '0.3.4'
+async-trait = '0.1'
+futures = '0.3'
+jsonrpc-core = '18.0.0'
+jsonrpc-pubsub = '18.0.0'
 log = '0.4.8'
-parking_lot = '0.10.0'
 structopt = '0.3.8'
-jsonrpc-core = '14.0.5'
+hex-literal = '0.3.1'
 
-[dependencies.node-template-runtime]
+[dependencies.fc-consensus]
+git = 'https://github.com/paritytech/frontier.git'
+rev = '0b962f218f0cdd796dadfe26c3f09e68f7861b26'
+
+[dependencies.fc-db]
+git = 'https://github.com/paritytech/frontier.git'
+rev = '0b962f218f0cdd796dadfe26c3f09e68f7861b26'
+
+[dependencies.fc-mapping-sync]
+git = 'https://github.com/paritytech/frontier.git'
+rev = '0b962f218f0cdd796dadfe26c3f09e68f7861b26'
+
+[dependencies.fc-rpc]
+git = 'https://github.com/paritytech/frontier.git'
+rev = '0b962f218f0cdd796dadfe26c3f09e68f7861b26'
+
+[dependencies.fc-rpc-core]
+git = 'https://github.com/paritytech/frontier.git'
+rev = '0b962f218f0cdd796dadfe26c3f09e68f7861b26'
+
+[dependencies.fp-consensus]
+git = 'https://github.com/paritytech/frontier.git'
+rev = '0b962f218f0cdd796dadfe26c3f09e68f7861b26'
+
+[dependencies.fp-rpc]
+git = 'https://github.com/paritytech/frontier.git'
+rev = '0b962f218f0cdd796dadfe26c3f09e68f7861b26'
+
+[dependencies.frame-benchmarking]
+git = 'https://github.com/paritytech/substrate'
+
+[dependencies.frame-benchmarking-cli]
+git = 'https://github.com/paritytech/substrate'
+
+[dependencies.creatorchain-runtime]
+default-features = false
+features = ['std']
 path = '../runtime'
-version = '2.0.0-rc4'
+
+[dependencies.pallet-dynamic-fee]
+git = 'https://github.com/paritytech/frontier.git'
+rev = '0b962f218f0cdd796dadfe26c3f09e68f7861b26'
+
+[dependencies.pallet-ethereum]
+git = 'https://github.com/paritytech/frontier.git'
+rev = '0b962f218f0cdd796dadfe26c3f09e68f7861b26'
+
+[dependencies.pallet-evm]
+git = 'https://github.com/paritytech/frontier.git'
+rev = '0b962f218f0cdd796dadfe26c3f09e68f7861b26'
+
+[dependencies.pallet-transaction-payment-rpc]
+git = 'https://github.com/paritytech/substrate'
 
 [dependencies.sc-basic-authorship]
-git = 'https://github.com/paritytech/substrate.git'
-tag = 'v2.0.0-rc4'
-version = '0.8.0-rc4'
+git = 'https://github.com/paritytech/substrate'
 
 [dependencies.sc-cli]
 features = ['wasmtime']
-git = 'https://github.com/paritytech/substrate.git'
-tag = 'v2.0.0-rc4'
-version = '0.8.0-rc4'
+git = 'https://github.com/paritytech/substrate'
 
 [dependencies.sc-client-api]
-git = 'https://github.com/paritytech/substrate.git'
-tag = 'v2.0.0-rc4'
-version = '2.0.0-rc4'
+git = 'https://github.com/paritytech/substrate'
 
 [dependencies.sc-consensus]
-git = 'https://github.com/paritytech/substrate.git'
-tag = 'v2.0.0-rc4'
-version = '0.8.0-rc4'
+git = 'https://github.com/paritytech/substrate'
 
 [dependencies.sc-consensus-aura]
-git = 'https://github.com/paritytech/substrate.git'
-tag = 'v2.0.0-rc4'
-version = '0.8.0-rc4'
+git = 'https://github.com/paritytech/substrate'
+
+[dependencies.sc-consensus-manual-seal]
+git = 'https://github.com/paritytech/substrate'
 
 [dependencies.sc-executor]
 features = ['wasmtime']
-git = 'https://github.com/paritytech/substrate.git'
-tag = 'v2.0.0-rc4'
-version = '0.8.0-rc4'
+git = 'https://github.com/paritytech/substrate'
 
 [dependencies.sc-finality-grandpa]
-git = 'https://github.com/paritytech/substrate.git'
-tag = 'v2.0.0-rc4'
-version = '0.8.0-rc4'
+git = 'https://github.com/paritytech/substrate'
+
+[dependencies.sc-keystore]
+git = 'https://github.com/paritytech/substrate'
 
 [dependencies.sc-network]
-git = 'https://github.com/paritytech/substrate.git'
-tag = 'v2.0.0-rc4'
-version = '0.8.0-rc4'
+git = 'https://github.com/paritytech/substrate'
+
+[dependencies.sc-rpc]
+git = 'https://github.com/paritytech/substrate'
+
+[dependencies.sc-rpc-api]
+git = 'https://github.com/paritytech/substrate'
 
 [dependencies.sc-service]
 features = ['wasmtime']
-git = 'https://github.com/paritytech/substrate.git'
-tag = 'v2.0.0-rc4'
-version = '0.8.0-rc4'
+git = 'https://github.com/paritytech/substrate'
+
+[dependencies.sc-telemetry]
+git = 'https://github.com/paritytech/substrate'
 
 [dependencies.sc-transaction-pool]
-git = 'https://github.com/paritytech/substrate.git'
-tag = 'v2.0.0-rc4'
-version = '2.0.0-rc4'
+git = 'https://github.com/paritytech/substrate'
+
+[dependencies.sc-transaction-pool-api]
+git = 'https://github.com/paritytech/substrate'
+
+[dependencies.sc-chain-spec]
+git = 'https://github.com/paritytech/substrate'
+
+[dependencies.sp-api]
+git = 'https://github.com/paritytech/substrate'
+
+[dependencies.sp-block-builder]
+git = 'https://github.com/paritytech/substrate'
+
+[dependencies.sp-blockchain]
+git = 'https://github.com/paritytech/substrate'
 
 [dependencies.sp-consensus]
-git = 'https://github.com/paritytech/substrate.git'
-tag = 'v2.0.0-rc4'
-version = '0.8.0-rc4'
+git = 'https://github.com/paritytech/substrate'
 
 [dependencies.sp-consensus-aura]
-git = 'https://github.com/paritytech/substrate.git'
-tag = 'v2.0.0-rc4'
-version = '0.8.0-rc4'
+git = 'https://github.com/paritytech/substrate'
 
 [dependencies.sp-core]
-git = 'https://github.com/paritytech/substrate.git'
-tag = 'v2.0.0-rc4'
-version = '2.0.0-rc4'
+git = 'https://github.com/paritytech/substrate'
 
 [dependencies.sp-finality-grandpa]
-git = 'https://github.com/paritytech/substrate.git'
-tag = 'v2.0.0-rc4'
-version = '2.0.0-rc4'
+git = 'https://github.com/paritytech/substrate'
 
 [dependencies.sp-inherents]
-git = 'https://github.com/paritytech/substrate.git'
-tag = 'v2.0.0-rc4'
-version = '2.0.0-rc4'
+git = 'https://github.com/paritytech/substrate'
 
 [dependencies.sp-runtime]
-git = 'https://github.com/paritytech/substrate.git'
-tag = 'v2.0.0-rc4'
-version = '2.0.0-rc4'
+git = 'https://github.com/paritytech/substrate'
 
-[dependencies.sp-transaction-pool]
-git = 'https://github.com/paritytech/substrate.git'
-tag = 'v2.0.0-rc4'
-version = '2.0.0-rc4'
+[dependencies.sp-timestamp]
+git = 'https://github.com/paritytech/substrate'
 
-[dependencies.pallet-contracts-rpc]
-git = 'https://github.com/paritytech/substrate.git'
-version = '0.8.0-rc4'
-tag = 'v2.0.0-rc4'
+[dependencies.substrate-frame-rpc-system]
+git = 'https://github.com/paritytech/substrate'
 
-[dependencies.sc-rpc]
-git = 'https://github.com/paritytech/substrate.git'
-tag = 'v2.0.0-rc4'
-
+[features]
+aura = ['creatorchain-runtime/aura']
+default = ['aura']
+manual-seal = ['creatorchain-runtime/manual-seal']
+runtime-benchmarks = ['creatorchain-runtime/runtime-benchmarks']
 [build-dependencies.substrate-build-script-utils]
-git = 'https://github.com/paritytech/substrate.git'
-tag = 'v2.0.0-rc4'
-version = '2.0.0-rc4'
+git = 'https://github.com/paritytech/substrate'

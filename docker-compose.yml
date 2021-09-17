@@ -1,18 +1,100 @@
-version: "3.2"
+version: "3"
 
 services:
-  dev:
-    container_name: node-template
-    image: paritytech/ci-linux:production
-    working_dir: /var/www/node-template
+  generate_sr_key:
+    container_name: generate_sr_key
+    image: ${IMAGE}:${VERSION}
+    command: bash -c "subkey generate --scheme sr25519"
+  generate_ed_key:
+    container_name: generate_ed_key
+    image: ${IMAGE}:${VERSION}
+    command: bash -c "subkey inspect --scheme ed25519 ''"
+  generate_node_key:
+    container_name: generate_node_key
+    image: ${IMAGE}:${VERSION}
+    volumes:
+      - ./git-pipeline/spec-data:/creatorchain/spec-data
+    command: bash -c "subkey generate-node-key --file /creatorchain/spec-data/node.key"
+  create_chain_spec:
+    container_name: create_chain_spec
+    image: ${IMAGE}:${VERSION}
+    user: root
+    volumes:
+      - ./git-pipeline/spec-data:/creatorchain/spec-data
+    command: bash -c "mkdir -p ~/spec && /usr/local/bin/creatorchain build-spec --disable-default-bootnode --chain local > /creatorchain/spec-data/custom-spec.json"
+  create_raw_chain_spec:
+    container_name: create_raw_chain_spec
+    image: ${IMAGE}:${VERSION}
+    user: root
+    volumes:
+      - ./git-pipeline/spec-data:/creatorchain/spec-data
+    command: bash -c "/usr/local/bin/creatorchain build-spec --chain=/creatorchain/spec-data/custom-spec.json --raw --disable-default-bootnode > /creatorchain/spec-data/custom-spec-raw.json"
+  generate_accounts:
+    container_name: generate_accounts
+    image: generate_accounts
+    user: root
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+    build:
+      context: ./
+      dockerfile: Dockerfile.generateAccounts
+    volumes:
+      - ./git-pipeline/accounts:/app/accounts
+      - ./git-pipeline/keys:/keys
+    command: npm run generate-accounts
+  testnet_node:
+    container_name: testnet_node
+    image: ${IMAGE}:${VERSION}
+    user: root
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
     ports:
       - "9944:9944"
       - "9933:9933"
-    environment:
-      - CARGO_HOME=/var/www/node-template/.cargo
+      - "30333:30333"
+      - "9615:9615"
     volumes:
-      - .:/var/www/node-template
-      - type: bind
-        source: ./.local
-        target: /root/.local
-    command: bash -c "cargo build --release && ./target/release/node-template --dev --ws-external"
+      - ./git-pipeline/spec-data:/creatorchain/spec-data
+      - ./git-pipeline/chain-data:/data
+    command: bash -c "/usr/local/bin/creatorchain -l${LOG_LEVEL} --name ${NODE_NAME} --node-key $$(cat /creatorchain/spec-data/node.key) --dev --ws-port 9944 --ws-external --unsafe-ws-external --rpc-port 9933 --rpc-methods=Unsafe --rpc-cors=all --rpc-external --telemetry-url 'wss://telemetry.polkadot.io/submit/ 0'"
+  boot_node:
+    container_name: boot_node
+    image: ${IMAGE}:${VERSION}
+    user: root
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+    ports:
+      - "9944:9944"
+      - "9933:9933"
+      - "30333:30333"
+      - "9615:9615"
+    volumes:
+      - ./git-pipeline/spec-data:/creatorchain/spec-data
+      - ./git-pipeline/chain-data:/data
+    command: bash -c "/usr/local/bin/creatorchain --prometheus-external --prometheus-port 9615 -l${LOG_LEVEL} --name ${NODE_NAME} --node-key $$(cat /creatorchain/spec-data/node.key) --chain /creatorchain/spec-data/custom-spec-raw.json --telemetry-url 'wss://telemetry.polkadot.io/submit/ 0' --ws-port 9944 --ws-external --unsafe-ws-external --rpc-port 9933 --rpc-methods=Unsafe --rpc-cors=all --rpc-external"
+  peer_node:
+    container_name: peer_node
+    image: ${IMAGE}:${VERSION}
+    user: root
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+    ports:
+      - "9944:9944"
+      - "9933:9933"
+      - "30333:30333"
+      - "9615:9615"
+    volumes:
+      - ./git-pipeline/spec-data:/creatorchain/spec-data
+      - ./git-pipeline/chain-data:/data
+    command: bash -c "/usr/local/bin/creatorchain --prometheus-external --prometheus-port 9615 -l${LOG_LEVEL} --name ${NODE_NAME} --chain /creatorchain/spec-data/custom-spec-raw.json --telemetry-url 'wss://telemetry.polkadot.io/submit/ 0' --bootnodes /ip4/${BOOT_NODE_IP_ADDRESS}/tcp/30333/p2p/${NETWORK_IDENTIFIER} --validator --ws-port 9944 --ws-external --unsafe-ws-external --rpc-port 9933 --rpc-methods=Unsafe --rpc-cors=all --rpc-external --pruning=archive"

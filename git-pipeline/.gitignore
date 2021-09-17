@@ -1,0 +1,4 @@
+chain-data/
+!chain-data/.gitkeep
+node_modules
+yarn.lock

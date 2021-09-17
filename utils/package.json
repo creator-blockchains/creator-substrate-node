@@ -1,0 +1,12 @@
+{
+  "name": "substrate-evm-utils",
+  "version": "0.0.0",
+  "dependencies": {
+    "@polkadot/api": "^3.11.1",
+    "keccak": "^3.0.0",
+    "web3": "^1.2.6"
+  },
+  "devDependencies": {
+    "typescript": "^4.2.3"
+  }
+}
