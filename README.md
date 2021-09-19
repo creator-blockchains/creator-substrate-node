@@ -1,44 +1,42 @@
-# creator-substrate
-### Run in Docker
+# Substrate Creatorchain Node Template
 
-First, install [Docker](https://docs.docker.com/get-docker/) and
-[Docker Compose](https://docs.docker.com/compose/install/).
+A [FRAME](https://substrate.dev/docs/en/next/conceptual/runtime/frame)-based
+[Substrate](https://substrate.dev/en/) node with the Ethereum RPC support, ready for hacking
+:rocket:
 
-Then run the following command to start a single node development chain.
+## Generation & Upstream
 
-```bash
-./scripts/docker_run.sh
+This template is maintained in the
+[Frontier](https://github.com/paritytech/frontier/tree/master/template) project repository, and can
+be used to generate a stand-alone template for use in an independent project via the included
+[template generation script](https://github.com/paritytech/frontier/blob/master/docs/node-template-release.md).
+
+A ready-to-use template generated this way is hosted for each Frontier release on the
+[creator-blockchains/creator-substrate-node](https://github.com/creator-blockchains/creator-substrate-node)
+repository.
+
+This template was originally forked from the
+[Substrate Node Template](https://github.com/substrate-developer-hub/substrate-node-template). You
+can find more information on features on this template there, and more detailed usage on the
+[Substrate Developer Hub Tutorials](https://substrate.dev/tutorials/) that use this heavily.
+
+## Build & Run
+
+To build the chain, execute the following commands from the project root:
+
+```
+$ cargo build --release
 ```
 
-This command will firstly compile your code, and then start a local development network. You can
-also replace the default command (`cargo build --release && ./target/release/node-template --dev --ws-external`)
-by appending your own. A few useful ones are as follow.
+To execute the chain, run:
 
-```bash
-# Run Substrate node without re-compiling
-./scripts/docker_run.sh ./target/release/node-template --dev --ws-external
-
-# Run Substrate node without re-compiling with rpc
-./scripts/docker_run.sh ./target/release/node-template --dev --ws-external --rpc-external
-
-# Purge the local dev chain
-./scripts/docker_run.sh ./target/release/node-template purge-chain --dev
-
-# Check whether the code is compilable
-./scripts/docker_run.sh cargo check
+```
+$ ./target/debug/creatorchain-node --dev
 ```
 
-# Ssh to container:
-```bash
-docker exec -it "containerName" /bin/bash
-```
+The node also supports to use manual seal (to produce block manually through RPC).  
+This is also used by the ts-tests:
 
-# Build:
-```bash
-cargo build --release
 ```
-
-# Run dev:
-```bash
-./target/release/node-template --dev --tmp
+$ ./target/debug/creatorchain-node --dev --manual-seal
 ```

@@ -1,0 +1,9 @@
+doc
+**target*
+.idea/
+Dockerfile
+.dockerignore
+.local
+# ignore reduce size and time
+# avoid re-build docker image
+.github/
